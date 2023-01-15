@@ -13,7 +13,7 @@ export default function ButtonAppBar() {
         <Box sx={{ flexGrow: 1 }}>
             <AppBar sx={{position: "fixed", background: "transparent", boxShadow: 0}}>
                 <Toolbar sx={{ justifyContent: "space-between", color:"black"}}>
-                    <IconButton
+                    {/* <IconButton
                         size="large"
                         edge="start"
                         color="inherit"
@@ -21,11 +21,11 @@ export default function ButtonAppBar() {
                         sx={{ ml: 2 }}
                     >
                         <MailIcon />
-                    </IconButton>
+                    </IconButton> */}
                     <Typography variant="h6" component="div">
                         Caden Juang
                     </Typography>
-                    <DrawerButton/>
+                    {/* <DrawerButton/> */}
                 </Toolbar>
             </AppBar>
         </Box>
