@@ -6,9 +6,11 @@ import { useSnapshot } from 'valtio'
 import { Minimap } from './Minimap'
 import { state, damp } from './util'
 import { Vector3 } from "three";
-import { Box } from '@mui/system'
+import { Box, Link } from '@mui/system'
 import Montserrat from "../fonts/Montserrat/static/Montserrat-Bold.ttf"
 import Courier_Prime from "../fonts/Courier_Prime/CourierPrime-Regular.ttf"
+
+import { Outlet, useNavigate } from 'react-router-dom'
 
 import '../styles/tiles.css';
 
@@ -16,10 +18,18 @@ import '../styles/tiles.css';
 const dummy = new Vector3()
 let xDim;
 const titles = ["MAV APP", "HOUSING MODEL", "EMAIL BOT", "THUNDER DASH", "CODE CLUB", "AI CLUB"]
+const pageLinks = ["WORK", "HOUSING MODEL", "EMAIL BOT", "THUNDER DASH", "CODE CLUB", "AI CLUB"]
 const colors = ["#DE4C3F", "#ECE8DE", "#DE4C3F", "#DE4C3F", "#DE4C3F", "#DE4C3F"]
 const textColors = ["#FFF1CE", "#55729C", "#FFF1CE", "#FFF1CE", "#FFF1CE", "#FFF1CE"]
 
 function Item({ index, position, scale, c = new THREE.Color(), ...props }) {
+
+    // let navigate = useNavigate();
+
+    // function handleClick(page) {
+    //     navigate(page);
+    // }
+
     const ref = useRef()
     const scroll = useScroll()
     const { clicked, urls } = useSnapshot(state)
@@ -29,6 +39,7 @@ function Item({ index, position, scale, c = new THREE.Color(), ...props }) {
     const click = () => {
         state.clicked = index === clicked ? null : index
         props.setTitles(titles[index])
+        props.setLink(pageLinks[index])
         props.setColor(colors[index])
         props.setTextColor(textColors[index])
     }
@@ -38,6 +49,7 @@ function Item({ index, position, scale, c = new THREE.Color(), ...props }) {
     function unclick() {
         state.clicked = null
         props.setTitles("")
+        props.setLink("")
         props.setColor("#141414")
     }
 
@@ -72,7 +84,7 @@ function Item({ index, position, scale, c = new THREE.Color(), ...props }) {
     return <Image ref={ref} {...props} position={position} scale={scale} height={2} onClick={click} onPointerOver={over} onPointerOut={out} />
 }
 
-function Items({ w = 0.7, gap = 0.15, setTitles, setColor, setTextColor }) {
+function Items({ w = 0.7, gap = 0.15, setTitles, setLink, setColor, setTextColor }) {
     const { urls } = useSnapshot(state)
     const { width } = useThree((state) => state.viewport)
     const xW = w + gap
@@ -81,7 +93,7 @@ function Items({ w = 0.7, gap = 0.15, setTitles, setColor, setTextColor }) {
         <ScrollControls horizontal damping={10} pages={(width - xW + urls.length * xW) / width}>
             <Minimap />
             <Scroll>
-                {urls.map((url, i) => <Item key={i} index={i} position={[xW * i, 0, 0]} scale={[w, 4, 1]} url={url} setTitles={setTitles} setColor={setColor} setTextColor={setTextColor} />) /* prettier-ignore */}    
+                {urls.map((url, i) => <Item key={i} index={i} position={[xW * i, 0, 0]} scale={[w, 4, 1]} url={url} setTitles={setTitles} setLink={setLink} setColor={setColor} setTextColor={setTextColor} />) /* prettier-ignore */}    
             </Scroll>
         </ScrollControls>
     )
@@ -90,6 +102,7 @@ function Items({ w = 0.7, gap = 0.15, setTitles, setColor, setTextColor }) {
 function Screen(props) {
     const [titleTop, setTop] = useState("");
     const [titleBottom, setBottom] = useState("");
+    const [link, setLink] = useState("");
     const [textColor, setTextColor] = useState("");
 
     function setTitles(title) {
@@ -98,8 +111,8 @@ function Screen(props) {
         setBottom(split[1])
     }
 
-
-
+    
+    
     return (
 
         <>
@@ -113,6 +126,16 @@ function Screen(props) {
                 {titleTop}
             </Text>
             <Text
+                scale={[1.5, 1.5, 10]}
+                position={[0, -2.5, 0]}
+                color={textColor} // default
+                font={Montserrat}
+                letterSpacing={0.3}
+                onClick={() => props.handleClick(link)}
+            >
+                {link}
+            </Text>
+            <Text
                 scale={[10, 10, 10]}
                 position={[0, -1.5, 0]}
                 color={textColor} // default
@@ -121,7 +144,7 @@ function Screen(props) {
             >
                 {titleBottom}
             </Text>
-            <Items setTitles={setTitles} setColor={props.setColor} setTextColor={setTextColor} />
+            <Items setTitles={setTitles} setLink={setLink} setColor={props.setColor} setTextColor={setTextColor} />
         </>
     )
 }
@@ -129,11 +152,19 @@ function Screen(props) {
 export default function HorizontalTiles() {
     const [color, setColor] = useState("");
 
+    let navigate = useNavigate();
+
+    async function handleClick(page) {
+        navigate(page);
+    }
+
     return (
+        <>
         <Box sx={{ height: '100vh', width: '100%', position: 'fixed', backgroundColor: color }} className="background">
             <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} onPointerMissed={() => (state.clicked = null)}>
-                <Screen setColor={setColor} />
+                <Screen setColor={setColor} handleClick={handleClick} />
             </Canvas>
         </Box>
+        </>
     )
 }
