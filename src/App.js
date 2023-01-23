@@ -4,6 +4,7 @@ import Home from './pages/Home';
 import Work from './pages/Work';
 import Animation from './components/ShipAnimation';
 import Intro from './pages/Intro';
+import BrickToByte from './pages/BrickToByte';
 
 import {
   Routes,
@@ -38,8 +39,16 @@ const MainLayoutRoutes = () => (
     <ButtonAppBar />
     <Routes>
       <Route path="/home" element={<Home />} >
-        <Route path="work" element={<Work/>} />
+        <Route path="*" element={<PortfolioRoutes />} />
       </Route>
+    </Routes>
+  </div>
+)
+
+const PortfolioRoutes = () => (
+  <div>
+    <Routes>
+      <Route path="btb" element={<BrickToByte/>} />
     </Routes>
   </div>
 )

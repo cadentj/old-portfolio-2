@@ -17,8 +17,8 @@ import '../styles/tiles.css';
 
 const dummy = new Vector3()
 let xDim;
-const titles = ["MAV APP", "HOUSING MODEL", "EMAIL BOT", "THUNDER DASH", "CODE CLUB", "AI CLUB"]
-const pageLinks = ["WORK", "HOUSING MODEL", "EMAIL BOT", "THUNDER DASH", "CODE CLUB", "AI CLUB"]
+const titles = ["BRICK2 BYTE", "HOUSING MODEL", "EMAIL BOT", "THUNDER DASH", "CODE CLUB", "AI CLUB"]
+const pageLinks = ["btb", "HOUSING MODEL", "EMAIL BOT", "THUNDER DASH", "CODE CLUB", "AI CLUB"]
 const colors = ["#DE4C3F", "#ECE8DE", "#DE4C3F", "#DE4C3F", "#DE4C3F", "#DE4C3F"]
 const textColors = ["#FFF1CE", "#55729C", "#FFF1CE", "#FFF1CE", "#FFF1CE", "#FFF1CE"]
 

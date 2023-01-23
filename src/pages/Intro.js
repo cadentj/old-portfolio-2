@@ -10,7 +10,6 @@ export default function Intro() {
     return (
         <Box sx={{backgroundColor:"black", height:'100vh', width:'100%', position:'absolute'}}>
             <Animation/>
-
         </Box>        
     );
 }
