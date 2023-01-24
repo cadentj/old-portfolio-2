@@ -96,12 +96,13 @@ export default function Animation(props) {
     return (
         <Box sx={{height:"100vh", backgroundColor:"black", position: "absolute", height:'100vh', width:'100%'}}>
             <Canvas camera={{ fov: 70, position: [0, 2, 100] }}>
+              <Suspense>
                 <directionalLight position={[10, 10, 5]} intensity={2} />
                 <directionalLight position={[-10, -10, -5]} intensity={2} />
                 <Brick/>
                 {/* <OrbitControls/> */}
                 <AsciiRenderer fgColor="white" bgColor="black" />
-                
+              </Suspense>
             </Canvas>
         </Box>
     )

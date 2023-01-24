@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 import { useRef, useState } from 'react'
-import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import { Canvas, useFrame, useThree,useLoader } from '@react-three/fiber'
 import { Image, ScrollControls, Scroll, useScroll, Text } from '@react-three/drei'
 import { useSnapshot } from 'valtio'
 import { Minimap } from './Minimap'
@@ -14,17 +14,19 @@ import { Outlet, useNavigate } from 'react-router-dom'
 
 import '../styles/tiles.css';
 
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
+
 
 const dummy = new Vector3()
 let xDim;
 const titles = ["BRICK2 BYTE", "HOUSING MODEL", "EMAIL BOT", "THUNDER DASH", "CODE CLUB", "AI CLUB"]
 const pageLinks = ["btb", "HOUSING MODEL", "EMAIL BOT", "THUNDER DASH", "CODE CLUB", "AI CLUB"]
-const colors = ["#DE4C3F", "#ECE8DE", "#DE4C3F", "#DE4C3F", "#DE4C3F", "#DE4C3F"]
-const textColors = ["#FFF1CE", "#55729C", "#FFF1CE", "#FFF1CE", "#FFF1CE", "#FFF1CE"]
+const colors = ["#484A68", "#ECE8DE", "#DE4C3F", "#DE4C3F", "#DE4C3F", "#DE4C3F"]
+const textColors = ["#EED450", "#55729C", "#FFF1CE", "#FFF1CE", "#FFF1CE", "#FFF1CE"]
 
 function Item({ index, position, scale, c = new THREE.Color(), ...props }) {
 
-    // let navigate = useNavigate();
+    // let navigate = useNavigate();484A68
 
     // function handleClick(page) {
     //     navigate(page);
@@ -149,6 +151,21 @@ function Screen(props) {
     )
 }
 
+const Milky = () => {
+    const gltf = useLoader(GLTFLoader, "./need_some_space/scene.gltf");
+
+    const ref = useRef();
+    useFrame(() => {
+        ref.current.rotation.y += 0.001;
+    })
+
+    return <mesh
+        ref={ref}
+    >
+        <primitive object={gltf.scene} position={[-2140, -2140, 2130]} scale={1500} />
+    </mesh>;
+};
+
 export default function HorizontalTiles() {
     const [color, setColor] = useState("");
 
@@ -163,6 +180,7 @@ export default function HorizontalTiles() {
         <Box sx={{ height: '100vh', width: '100%', position: 'fixed', backgroundColor: color }} className="background">
             <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} onPointerMissed={() => (state.clicked = null)}>
                 <Screen setColor={setColor} handleClick={handleClick} />
+                <Milky/>
             </Canvas>
         </Box>
         </>

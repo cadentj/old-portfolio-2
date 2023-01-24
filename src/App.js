@@ -36,7 +36,7 @@ export default function App() {
 
 const MainLayoutRoutes = () => (
   <div>
-    <ButtonAppBar />
+    {/* <ButtonAppBar /> */}
     <Routes>
       <Route path="/home" element={<Home />} >
         <Route path="*" element={<PortfolioRoutes />} />

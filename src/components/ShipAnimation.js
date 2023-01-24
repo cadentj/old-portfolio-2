@@ -11,6 +11,10 @@ import Montserrat from "../fonts/Montserrat/static/Montserrat-Bold.ttf"
 import Montserrat_Light from "../fonts/Montserrat/static/Montserrat-Light.ttf"
 import Courier_Prime from "../fonts/Courier_Prime/CourierPrime-Regular.ttf"
 
+
+import { Points, PointMaterial } from '@react-three/drei'
+import * as random from 'maath/random/dist/maath-random.esm'
+
 // Dummy target for camera lerp
 const dummy = new Vector3()
 // Mouse tracking library data
@@ -28,8 +32,9 @@ let reached = false;
 // When the milky way mesh renders, it updates state to render in the lagging text
 let hasRendered = false;
 
+
 const MiningStation = () => {
-    const gltf = useLoader(GLTFLoader, "./station/scene.gltf");
+    const fbx = useLoader(FBXLoader, "./Death Star/Death Star.FBX");
 
     const ref = useRef();
     useFrame(() => (ref.current.rotation.y += 0.01));
@@ -40,11 +45,14 @@ const MiningStation = () => {
         position={[10, -2, 15]}
     >
         // Position around which the station rotates
-        <primitive object={gltf.scene} position={[-1, 0, 4.65]} scale={0.1} />
+        {/* <primitive object={fbx} position={[-1, 0, 4.65]} scale={0.01} /> */}
+        <primitive object={fbx} position={[0,0,50]} scale={0.05} />
     </mesh>;
 
     return planetMesh;
 };
+
+
 
 
 const Cover = () => {
@@ -112,16 +120,34 @@ const Milky = ({ handleClick }) => {
         }}
         onClick={handleClick}
     >
-        <primitive object={gltf.scene} position={[-2140, -2140, 2130]} scale={1500} />
+        <primitive object={gltf.scene} scale={100} />
     </mesh>;
 };
+
+
+function Stars(props) {
+    const ref = useRef()
+    const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 1.5 }))
+    useFrame((state, delta) => {
+      ref.current.rotation.x -= delta / 10
+      ref.current.rotation.y -= delta / 15
+    })
+    return (
+      <group rotation={[0, 0, Math.PI / 4]}>
+        <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
+          <PointMaterial transparent color="#ffa0e0" size={0.005} sizeAttenuation={true} depthWrite={false} />
+        </Points>
+      </group>
+    )
+}
+
 
 const Ship = () => {
     const fbx = useLoader(FBXLoader, "./X-Wing.fbx");
 
     return (
         <mesh
-            position={[0, 2, 15]}
+            // position={[0, 2, 15]}
             rotation={[0, Math.PI, 0]}
         >
             <primitive object={fbx} scale={0.001} />
@@ -184,7 +210,8 @@ export default function Animation(props) {
                     <directionalLight position={[-10, -10, -5]} intensity={1} />
                     <Suspense>
                         <Cover />
-                        <Milky handleClick={handleClick} />
+                        {/* <Milky handleClick={handleClick} /> */}
+                        <Stars/>
                         <MiningStation />
                         <MouseTrackingShip />
                     </Suspense>
