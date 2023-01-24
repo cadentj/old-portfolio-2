@@ -11,6 +11,7 @@ import Montserrat from "../fonts/Montserrat/static/Montserrat-Bold.ttf"
 import Montserrat_Light from "../fonts/Montserrat/static/Montserrat-Light.ttf"
 import Courier_Prime from "../fonts/Courier_Prime/CourierPrime-Regular.ttf"
 
+import { ScrollControls, useScroll} from '@react-three/drei';
 
 import { Points, PointMaterial } from '@react-three/drei'
 import * as random from '@react-three/drei/node_modules/maath/random/dist/maath-random.esm'
@@ -142,7 +143,7 @@ const Ship = () => {
 
     return (
         <mesh
-            // position={[0, 2, 15]}
+            position={[-10, 2, 15]}
             rotation={[0, Math.PI, 0]}
         >
             <primitive object={fbx} scale={0.001} />
@@ -181,6 +182,25 @@ const MouseTrackingShip = () => {
     )
 }
 
+const Composition = () => {
+    const scroll = useScroll()
+    useFrame(() => {
+        console.log(scroll.range(0 / 4, 1 / 4))
+    })
+    
+    return (
+        <>
+            <directionalLight position={[10, 10, 5]} intensity={2} />
+            <directionalLight position={[-10, -10, -5]} intensity={1} />
+            <Suspense>
+                {/* <Cover /> */}
+                {/* <Milky handleClick={handleClick} /> */}
+                <MiningStation />
+                <MouseTrackingShip />
+            </Suspense>
+        </>
+    )
+}
 
 export default function Animation(props) {
     width = window.innerWidth;
@@ -200,17 +220,13 @@ export default function Animation(props) {
         }}>
 
             <Box sx={{height:"100vh", backgroundColor:"black"}}>
-                <Canvas camera={{ fov: 70, position: [0, 2, 100] }}>
-                    <directionalLight position={[10, 10, 5]} intensity={2} />
-                    <directionalLight position={[-10, -10, -5]} intensity={1} />
-                    <Suspense>
-                        {/* <Cover /> */}
-                        <Milky handleClick={handleClick} />
-                        {/* <MiningStation /> */}
-                        <MouseTrackingShip />
-                    </Suspense>
-                </Canvas>
-                <Loader />
+                
+                    <Canvas camera={{ fov: 70, position: [-12, 2, 50] }}>
+                        <ScrollControls pages={5}>
+                            <Composition/>
+                        </ScrollControls>
+                    </Canvas>
+                    <Loader />
             </Box>
         </div>
     )
