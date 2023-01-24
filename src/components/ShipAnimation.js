@@ -13,7 +13,7 @@ import Courier_Prime from "../fonts/Courier_Prime/CourierPrime-Regular.ttf"
 
 
 import { Points, PointMaterial } from '@react-three/drei'
-import * as random from 'maath/random/dist/maath-random.esm'
+import * as random from '@react-three/drei/node_modules/maath/random/dist/maath-random.esm'
 
 // Dummy target for camera lerp
 const dummy = new Vector3()
@@ -46,7 +46,7 @@ const MiningStation = () => {
     >
         // Position around which the station rotates
         {/* <primitive object={fbx} position={[-1, 0, 4.65]} scale={0.01} /> */}
-        <primitive object={fbx} position={[0,0,50]} scale={0.05} />
+        <primitive object={fbx} scale={0.05} />
     </mesh>;
 
     return planetMesh;
@@ -59,7 +59,7 @@ const Cover = () => {
     return (
         <>
             <Text
-                scale={[200, 200, 200]}
+                scale={[10, 10, 200]}
                 position={[0, 25, 10]}
                 color="white" // default
                 font={Montserrat}
@@ -99,7 +99,6 @@ const Cover = () => {
 
 
 const Milky = ({ handleClick }) => {
-    const gltf = useLoader(GLTFLoader, "./need_some_space/scene.gltf");
 
     const ref = useRef();
     const [active, setActive] = useState(false);
@@ -107,7 +106,7 @@ const Milky = ({ handleClick }) => {
     const targetPosition = new Vector3(0, 2, 20);
 
     useFrame((state) => {
-        ref.current.rotation.y += 0.004;
+        // ref.current.rotation.y += 0.004;
         if (active && state.camera.position.z > targetPosition.getComponent(2)) {
             state.camera.position.lerp(dummy.set(0, 2, 19.5), 0.2);
         }
@@ -116,26 +115,22 @@ const Milky = ({ handleClick }) => {
     return <mesh
         ref={ref}
         onWheel={() => {
+            console.log("scrolled")
             if (!reached) setActive(!active);
         }}
         onClick={handleClick}
     >
-        <primitive object={gltf.scene} scale={100} />
+        <Stars/>
     </mesh>;
 };
 
 
 function Stars(props) {
-    const ref = useRef()
-    const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 1.5 }))
-    useFrame((state, delta) => {
-      ref.current.rotation.x -= delta / 10
-      ref.current.rotation.y -= delta / 15
-    })
+    const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 100 }))
     return (
-      <group rotation={[0, 0, Math.PI / 4]}>
-        <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
-          <PointMaterial transparent color="#ffa0e0" size={0.005} sizeAttenuation={true} depthWrite={false} />
+      <group >
+        <Points positions={sphere} stride={3} frustumCulled={false} {...props}>
+          <PointMaterial transparent color="#ffffff" size={1} sizeAttenuation={true} depthWrite={false} />
         </Points>
       </group>
     )
@@ -209,10 +204,9 @@ export default function Animation(props) {
                     <directionalLight position={[10, 10, 5]} intensity={2} />
                     <directionalLight position={[-10, -10, -5]} intensity={1} />
                     <Suspense>
-                        <Cover />
-                        {/* <Milky handleClick={handleClick} /> */}
-                        <Stars/>
-                        <MiningStation />
+                        {/* <Cover /> */}
+                        <Milky handleClick={handleClick} />
+                        {/* <MiningStation /> */}
                         <MouseTrackingShip />
                     </Suspense>
                 </Canvas>
