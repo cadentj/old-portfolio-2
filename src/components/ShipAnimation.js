@@ -3,7 +3,7 @@ import React, { useRef, Suspense, useState, useEffect } from 'react';
 import { Canvas, useThree, useLoader, useFrame } from "@react-three/fiber";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Vector3 } from "three";
+import { Camera, Vector3 } from "three";
 import { Html, OrbitControls, Loader, Text } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 
@@ -15,6 +15,8 @@ import { ScrollControls, useScroll} from '@react-three/drei';
 
 import { Points, PointMaterial } from '@react-three/drei'
 import * as random from '@react-three/drei/node_modules/maath/random/dist/maath-random.esm'
+
+import { PerspectiveCamera } from '@react-three/drei';
 
 // Dummy target for camera lerp
 const dummy = new Vector3()
@@ -184,12 +186,17 @@ const MouseTrackingShip = () => {
 
 const Composition = () => {
     const scroll = useScroll()
-    useFrame(() => {
-        console.log(scroll.range(0 / 4, 1 / 4))
+    let camera_pos = ""
+    const [count, setCount] = useState(0);
+
+    useFrame((state, delta) => {
+        const offset = scroll.offset
+        state.camera.position.set(-12,2, (100 - offset * 80))
     })
     
     return (
         <>
+            {/* <PerspectiveCamera makeDefault position={camera_pos}/> */}
             <directionalLight position={[10, 10, 5]} intensity={2} />
             <directionalLight position={[-10, -10, -5]} intensity={1} />
             <Suspense>
@@ -221,7 +228,7 @@ export default function Animation(props) {
 
             <Box sx={{height:"100vh", backgroundColor:"black"}}>
                 
-                    <Canvas camera={{ fov: 70, position: [-12, 2, 50] }}>
+                    <Canvas camera={{ fov: 70, position: [-12, 2, 100] }}>
                         <ScrollControls pages={5}>
                             <Composition/>
                         </ScrollControls>
