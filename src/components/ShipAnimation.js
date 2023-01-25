@@ -40,16 +40,16 @@ const MiningStation = () => {
     const fbx = useLoader(FBXLoader, "./Death Star/Death Star.FBX");
 
     const ref = useRef();
-    useFrame(() => (ref.current.rotation.y += 0.01));
+    useFrame(() => (ref.current.rotation.y += 0.005));
 
     const planetMesh = <mesh
         ref={ref}
         // Actual position
-        position={[10, -2, 15]}
+        position={[30, -2, 15]}
     >
         // Position around which the station rotates
         {/* <primitive object={fbx} position={[-1, 0, 4.65]} scale={0.01} /> */}
-        <primitive object={fbx} scale={0.05} />
+        <primitive  object={fbx} scale={0.05} />
     </mesh>;
 
     return planetMesh;
@@ -62,7 +62,7 @@ const Cover = () => {
     return (
         <>
             <Text
-                scale={[10, 10, 200]}
+                scale={[15, 15, 1]}
                 position={[0, 25, 10]}
                 color="white" // default
                 font={Montserrat}
@@ -71,7 +71,7 @@ const Cover = () => {
                 CADEN
             </Text>
             <Text
-                scale={[200, 200, 200]}
+                scale={[15, 15, 1]}
                 position={[0, -25, 10]}
                 color="white" // default
                 font={Montserrat}
@@ -80,7 +80,7 @@ const Cover = () => {
                 JUANG
             </Text>
             <Text
-                scale={[30, 30, 30]}
+                scale={[2, 2, 30]}
                 position={[0, -40, 10]}
                 color="white" // default
                 font={Courier_Prime}
@@ -88,7 +88,7 @@ const Cover = () => {
                 &gt;&gt;&gt;  scroll to fly &lt;&lt;&lt;
             </Text>
             <Text
-                scale={[7, 7, 7]}
+                scale={[0.5, 0.5, 1]}
                 position={[0, -5, 0]}
                 color="white" // default
                 font={Courier_Prime}
@@ -101,51 +101,46 @@ const Cover = () => {
 };
 
 
-const Milky = ({ handleClick }) => {
-
-    const ref = useRef();
-    const [active, setActive] = useState(false);
-
-    const targetPosition = new Vector3(0, 2, 20);
-
-    useFrame((state) => {
-        // ref.current.rotation.y += 0.004;
-        if (active && state.camera.position.z > targetPosition.getComponent(2)) {
-            state.camera.position.lerp(dummy.set(0, 2, 19.5), 0.2);
-        }
-    })
-
-    return <mesh
-        ref={ref}
-        onWheel={() => {
-            console.log("scrolled")
-            if (!reached) setActive(!active);
-        }}
-        onClick={handleClick}
-    >
-        <Stars/>
-    </mesh>;
-};
-
 
 function Stars(props) {
-    const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 100 }))
+    const ref = useRef();
+
+    useFrame((state) => {ref.current.rotation.y += 0.004})
+
+    const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 200 }))
     return (
       <group >
-        <Points positions={sphere} stride={3} frustumCulled={false} {...props}>
-          <PointMaterial transparent color="#ffffff" size={1} sizeAttenuation={true} depthWrite={false} />
+        <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
+          <PointMaterial transparent color="#ffffff" size={0.3} sizeAttenuation={true} depthWrite={false} />
         </Points>
       </group>
     )
 }
 
+const Destroy = () => {
+    const gltf = useLoader(GLTFLoader, "./star_destroyer/scene.gltf");
+
+    const ref = useRef();
+    useFrame(() => (ref.current.rotation.y += 0.005));
+
+    const planetMesh = <mesh
+        ref={ref}
+        position={[26, -3, 15]}
+    >
+        // Position around which the station rotates
+        <primitive object={gltf.scene} position={[-10, 0, 20]} rotation={[0,-Math.PI/1.8,0]} scale={0.3} />
+    </mesh>;
+
+    return planetMesh;
+};
+
 
 const Ship = () => {
     const fbx = useLoader(FBXLoader, "./X-Wing.fbx");
-
+    
     return (
         <mesh
-            position={[-10, 2, 15]}
+            position={[0, 2, 15]}
             rotation={[0, Math.PI, 0]}
         >
             <primitive object={fbx} scale={0.001} />
@@ -156,7 +151,6 @@ const Ship = () => {
 const MouseTrackingShip = () => {
 
     const ref = useRef()
-
     useFrame(() => {
         if ((trackedX !== null && !isNaN(trackedX)) && (trackedY !== null && !isNaN(trackedY))) {
             const xFactor = width / 0.25;
@@ -191,19 +185,22 @@ const Composition = () => {
 
     useFrame((state, delta) => {
         const offset = scroll.offset
-        state.camera.position.set(-12,2, (100 - offset * 80))
+        state.camera.position.set(0,2, (100 - offset * 80))
     })
     
+    const ref = useRef()
+
     return (
         <>
             {/* <PerspectiveCamera makeDefault position={camera_pos}/> */}
             <directionalLight position={[10, 10, 5]} intensity={2} />
             <directionalLight position={[-10, -10, -5]} intensity={1} />
             <Suspense>
-                {/* <Cover /> */}
-                {/* <Milky handleClick={handleClick} /> */}
+                <Cover />
+                <Stars/>
                 <MiningStation />
-                <MouseTrackingShip />
+                <MouseTrackingShip/>
+                <Destroy/>
             </Suspense>
         </>
     )
@@ -228,7 +225,7 @@ export default function Animation(props) {
 
             <Box sx={{height:"100vh", backgroundColor:"black"}}>
                 
-                    <Canvas camera={{ fov: 70, position: [-12, 2, 100] }}>
+                    <Canvas camera={{ fov: 70}}>
                         <ScrollControls pages={5}>
                             <Composition/>
                         </ScrollControls>
