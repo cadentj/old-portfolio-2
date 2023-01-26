@@ -62,8 +62,6 @@ function Item({ index, position, scale, c = new THREE.Color(), ...props }) {
         return state.clicked == null
     }
 
-    const [centered, center] = useState(false)
-
     useFrame((state, delta) => {
         const difference = scroll.offset * xDim
         const newIndex = (clicked === null) ? 0 : index - clicked;
@@ -80,7 +78,7 @@ function Item({ index, position, scale, c = new THREE.Color(), ...props }) {
         // if (scroll.delta > 0.001) unclick()
         // if (clicked === null) props.setTitles("")
         // if (clicked === null) props.setColors("#141414")
-        if (scroll.delta > 0.001 || checkClicked()) unclick()
+        if (scroll.delta > 0.0085 || checkClicked()) unclick()
 
         ref.current.material.grayscale = damp(ref.current.material.grayscale, hovered || clicked === index ? 0 : Math.max(0, 1 - y), 6, delta)
         ref.current.material.color.lerp(c.set(hovered || clicked === index ? 'white' : '#aaa'), hovered ? 0.3 : 0.1)
@@ -94,7 +92,7 @@ function Items({ w = 0.7, gap = 0.15, setTitles, setLink, setColor, setTextColor
     const xW = w + gap
     xDim = xW * (urls.length - 1)
     return (
-        <ScrollControls horizontal damping={10} pages={(width - xW + urls.length * xW) / width}>
+        <ScrollControls horizontal damping={0.40} pages={(width - xW + urls.length * xW) / width}>
             <Minimap />
             <Scroll>
                 {urls.map((url, i) => <Item key={i} index={i} position={[xW * i, 0, 0]} scale={[w, 4, 1]} url={url} setTitles={setTitles} setLink={setLink} setColor={setColor} setTextColor={setTextColor} />) /* prettier-ignore */}    
@@ -176,6 +174,8 @@ export default function HorizontalTiles() {
     async function handleClick(page) {
         navigate(page);
     }
+
+    const [titleTop, setTop] = useState("");
 
     return (
         <>
