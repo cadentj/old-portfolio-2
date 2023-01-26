@@ -16,6 +16,9 @@ import '../styles/tiles.css';
 
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
 
+import { Points, PointMaterial } from '@react-three/drei'
+import * as random from '@react-three/drei/node_modules/maath/random/dist/maath-random.esm'
+
 
 const dummy = new Vector3()
 let xDim;
@@ -62,7 +65,6 @@ function Item({ index, position, scale, c = new THREE.Color(), ...props }) {
     const [centered, center] = useState(false)
 
     useFrame((state, delta) => {
-
         const difference = scroll.offset * xDim
         const newIndex = (clicked === null) ? 0 : index - clicked;
         const y = scroll.curve(index / urls.length - 1.5 / urls.length, 4 / urls.length)
@@ -119,7 +121,7 @@ function Screen(props) {
 
         <>
             <Text
-                scale={[10, 10, 10]}
+                scale={[1, 1, 10]}
                 position={[0, 1.5, 0]}
                 color={textColor} // default
                 font={Montserrat}
@@ -128,7 +130,7 @@ function Screen(props) {
                 {titleTop}
             </Text>
             <Text
-                scale={[1.5, 1.5, 10]}
+                scale={[.15, .15, 10]}
                 position={[0, -2.5, 0]}
                 color={textColor} // default
                 font={Montserrat}
@@ -138,7 +140,7 @@ function Screen(props) {
                 {link}
             </Text>
             <Text
-                scale={[10, 10, 10]}
+                scale={[1, 1, 10]}
                 position={[0, -1.5, 0]}
                 color={textColor} // default
                 font={Montserrat}
@@ -151,20 +153,20 @@ function Screen(props) {
     )
 }
 
-const Milky = () => {
-    const gltf = useLoader(GLTFLoader, "./need_some_space/scene.gltf");
-
+function Stars(props) {
     const ref = useRef();
-    useFrame(() => {
-        ref.current.rotation.y += 0.001;
-    })
 
-    return <mesh
-        ref={ref}
-    >
-        <primitive object={gltf.scene} position={[-2140, -2140, 2130]} scale={1500} />
-    </mesh>;
-};
+    useFrame((state) => {ref.current.rotation.y += 0.004})
+
+    const [sphere] = useState(() => random.inSphere(new Float32Array(5000), { radius: 200 }))
+    return (
+      <group >
+        <Points ref={ref} positions={sphere} stride={3} frustumCulled={false} {...props}>
+          <PointMaterial transparent color="#ffffff" size={0.3} sizeAttenuation={true} depthWrite={false} />
+        </Points>
+      </group>
+    )
+}
 
 export default function HorizontalTiles() {
     const [color, setColor] = useState("");
@@ -180,7 +182,7 @@ export default function HorizontalTiles() {
         <Box sx={{ height: '100vh', width: '100%', position: 'fixed', backgroundColor: color }} className="background">
             <Canvas gl={{ antialias: false }} dpr={[1, 1.5]} onPointerMissed={() => (state.clicked = null)}>
                 <Screen setColor={setColor} handleClick={handleClick} />
-                <Milky/>
+                <Stars/>
             </Canvas>
         </Box>
         </>

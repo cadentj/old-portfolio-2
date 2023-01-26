@@ -16,7 +16,6 @@ import { ScrollControls, useScroll} from '@react-three/drei';
 import { Points, PointMaterial } from '@react-three/drei'
 import * as random from '@react-three/drei/node_modules/maath/random/dist/maath-random.esm'
 
-import { PerspectiveCamera } from '@react-three/drei';
 
 // Dummy target for camera lerp
 const dummy = new Vector3()
@@ -28,34 +27,25 @@ let height;
 // Frame updated ship position
 let x = 0;
 let y = 0;
-// Has camera reached ship on scroll
-// Moved out of milky method to prevent it from reloading on state update
-let reached = false;
-// Text doesn't render initially for some reason, but all other meshes do
-// When the milky way mesh renders, it updates state to render in the lagging text
-let hasRendered = false;
 
 
-const MiningStation = () => {
+const DeathStar = () => {
     const fbx = useLoader(FBXLoader, "./Death Star/Death Star.FBX");
 
     const ref = useRef();
     useFrame(() => (ref.current.rotation.y += 0.005));
 
-    const planetMesh = <mesh
+    const deathStarMesh = <mesh
         ref={ref}
         // Actual position
-        position={[30, -2, 15]}
+        position={[30, -1, 15]}
     >
         // Position around which the station rotates
-        {/* <primitive object={fbx} position={[-1, 0, 4.65]} scale={0.01} /> */}
         <primitive  object={fbx} scale={0.05} />
     </mesh>;
 
-    return planetMesh;
+    return deathStarMesh;
 };
-
-
 
 
 const Cover = () => {
@@ -63,7 +53,7 @@ const Cover = () => {
         <>
             <Text
                 scale={[15, 15, 1]}
-                position={[0, 25, 10]}
+                position={[30, 25, 10]}
                 color="white" // default
                 font={Montserrat}
                 letterSpacing={0.3}
@@ -72,7 +62,7 @@ const Cover = () => {
             </Text>
             <Text
                 scale={[15, 15, 1]}
-                position={[0, -25, 10]}
+                position={[30, -25, 10]}
                 color="white" // default
                 font={Montserrat}
                 letterSpacing={0.3}
@@ -81,7 +71,7 @@ const Cover = () => {
             </Text>
             <Text
                 scale={[2, 2, 30]}
-                position={[0, -40, 10]}
+                position={[30, -40, 10]}
                 color="white" // default
                 font={Courier_Prime}
             >
@@ -117,7 +107,7 @@ function Stars(props) {
     )
 }
 
-const Destroy = () => {
+const StarDestroyer = () => {
     const gltf = useLoader(GLTFLoader, "./star_destroyer/scene.gltf");
 
     const ref = useRef();
@@ -180,27 +170,24 @@ const MouseTrackingShip = () => {
 
 const Composition = () => {
     const scroll = useScroll()
-    let camera_pos = ""
-    const [count, setCount] = useState(0);
 
     useFrame((state, delta) => {
         const offset = scroll.offset
-        state.camera.position.set(0,2, (100 - offset * 80))
+        state.camera.position.set((30 - offset * 30), 2, (100 - offset * 80))
     })
     
     const ref = useRef()
 
     return (
         <>
-            {/* <PerspectiveCamera makeDefault position={camera_pos}/> */}
             <directionalLight position={[10, 10, 5]} intensity={2} />
             <directionalLight position={[-10, -10, -5]} intensity={1} />
             <Suspense>
-                <Cover />
+                <Cover/>
                 <Stars/>
-                <MiningStation />
+                <DeathStar />
                 <MouseTrackingShip/>
-                <Destroy/>
+                <StarDestroyer/>
             </Suspense>
         </>
     )
@@ -225,7 +212,7 @@ export default function Animation(props) {
 
             <Box sx={{height:"100vh", backgroundColor:"black"}}>
                 
-                    <Canvas camera={{ fov: 70}}>
+                    <Canvas camera={{ fov: 70}} onClick={handleClick}>
                         <ScrollControls pages={5}>
                             <Composition/>
                         </ScrollControls>

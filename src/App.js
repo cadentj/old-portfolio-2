@@ -38,7 +38,7 @@ const MainLayoutRoutes = () => (
   <div>
     {/* <ButtonAppBar /> */}
     <Routes>
-      <Route path="/home" element={<Home />} >
+      <Route path="home" element={<Home />} >
         <Route path="*" element={<PortfolioRoutes />} />
       </Route>
     </Routes>
