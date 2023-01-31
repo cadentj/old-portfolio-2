@@ -172,7 +172,8 @@ export default function HorizontalTiles() {
     let navigate = useNavigate();
 
     async function handleClick(page) {
-        navigate(page);
+        let new_page = "/" + page
+        navigate(new_page);
     }
 
     const [titleTop, setTop] = useState("");

@@ -12,7 +12,7 @@ export default function Home() {
         <>
         
             <HorizontalTiles/>
-            <Outlet/>
+            {/* <Outlet/> */}
         </>
     );
 }

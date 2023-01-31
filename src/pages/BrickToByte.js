@@ -18,6 +18,9 @@ const theme = createTheme({
     typography: {
         fontFamily: 'Source Code Pro, Montserrat, Roboto',
     },
+    palette: {
+        mode: 'dark',
+    },
 });
 
 
@@ -34,31 +37,42 @@ export default function BrickToByte() {
 
     return (
         <ThemeProvider theme={theme}>
-            <Box sx={{backgroundColor:"black", height:'100vh', width:'100%'}}>
+            <Box sx={{backgroundColor:"#141414", height:'100vh', width:'100%'}}>
                 <Animation/>
-                <Box sx={{position:"relative", textAlign:"center"}}>
-                    <Typography sx={{color: "white", fontFamily:"Source Code Pro", fontSize: '150px'}}>
-                        BRICK 2
-                    </Typography>
-                    <Typography sx={{color: "white", fontFamily:"Source Code Pro", fontSize: '150px'}}>
-                        BYTE
-                    </Typography>
+                <Box sx={{position:"relative",height:'100vh',width:'100%'}}>
+                    <Grid container direction="column"
+                        justifyContent="space-between"
+                        alignItems="stretch"
+                        height='100vh'
+                        >
+                        <Grid item sx={{pr:20}}>
+                            <Typography sx={{color: "white", fontFamily:"Source Code Pro", fontSize: '150px', textAlign:"right"}}>
+                                BRICK
+                            </Typography>
+                        </Grid>
+                        <Grid item sx={{pl:20}}>
+                            <Typography sx={{color: "white", fontFamily:"Source Code Pro", fontSize: '150px'}}>
+                                2 BYTE
+                            </Typography>
+                        </Grid>
+                    </Grid>
                 </Box>
             </Box>      
-            <Box sx={{position:"relative"}}>
-                <Grid container spacing={2}>
-                    <Grid item xs={6} md={8}>
-                        <Item>xs=6 md=8</Item>
+            <Box sx={{position:"relative", height:"50vh", backgroundColor:"#141414"}}>
+                <Grid container spacing={2} height={1}>
+                    <Grid item xs={1} md={2}/>
+                    <Grid item xs={10} md={8}>
+                        <Item sx={{height:'75%'}}>Test</Item>
                     </Grid>
-                    <Grid item xs={6} md={4}>
-                        <Item>xs=6 md=4</Item>
+                    <Grid item xs={1} md={2}/>
+                </Grid>
+            </Box>  
+            <Box sx={{position:"relative", height:"50vh", backgroundColor:"#141414"}}>
+                <Grid container spacing={2} height={1} justifyContent={'flex-end'}>
+                    <Grid item xs={6} md={6} sx={{border:1, borderColor:'white'}}>
+                        <Item sx={{height:'75%', width:'75%'}}>Test</Item>
                     </Grid>
-                    <Grid item xs={6} md={4}>
-                        <Item>xs=6 md=4</Item>
-                    </Grid>
-                    <Grid item xs={6} md={8}>
-                        <Item>xs=6 md=8</Item>
-                    </Grid>
+                    <Grid item xs={6} md={6}/>
                 </Grid>
             </Box>  
         </ThemeProvider>

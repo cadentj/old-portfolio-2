@@ -23,9 +23,9 @@ const Brick = () => {
 
     return (
         <mesh
-        position={[-3,-20,15]}
+        position={[0,-20,15]}
         ref={ref}>
-            <primitive object={fbx} scale={0.4} />
+            <primitive object={fbx} scale={0.4} position={[-3,0,0]}/>
         </mesh>
     );
 };
@@ -34,7 +34,7 @@ function AsciiRenderer({
     renderIndex = 1,
     bgColor = 'black',
     fgColor = 'white',
-    characters = ' .:-+*=%# ~',
+    characters = ' .:-+*=%#~',
     invert = false,
     color = false,
     resolution = 0.15
@@ -94,14 +94,15 @@ export default function Animation(props) {
     }
 
     return (
-        <Box sx={{height:"100vh", backgroundColor:"black", position: "absolute", height:'100vh', width:'100%'}}>
+        <Box sx={{height:"100vh", backgroundColor:"transparent", position: "absolute", height:'100vh', width:'100%'}}>
             <Canvas camera={{ fov: 70, position: [0, 2, 100] }}>
               <Suspense>
                 <directionalLight position={[10, 10, 5]} intensity={2} />
                 <directionalLight position={[-10, -10, -5]} intensity={2} />
                 <Brick/>
                 {/* <OrbitControls/> */}
-                <AsciiRenderer fgColor="white" bgColor="black" />
+                <AsciiRenderer fgColor="white" bgColor="#141414" />
+                
               </Suspense>
             </Canvas>
         </Box>

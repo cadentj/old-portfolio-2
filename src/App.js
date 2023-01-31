@@ -26,29 +26,42 @@ const theme = createTheme({
 export default function App() {
   return (
     <ThemeProvider theme={theme}>
+      <ButtonAppBar/>
       <Routes>
         <Route path="/" element={<Animation />} />
-        <Route path="*" element={<MainLayoutRoutes />} />
+        <Route path="home" element={<Home />} />
+        <Route path="btb" element={<BrickToByte />} />
       </Routes>
     </ThemeProvider>
   );
 }
 
-const MainLayoutRoutes = () => (
-  <div>
-    {/* <ButtonAppBar /> */}
-    <Routes>
-      <Route path="/home" element={<Home />} >
-        <Route path="*" element={<PortfolioRoutes />} />
-      </Route>
-    </Routes>
-  </div>
-)
+// export default function App() {
+//   return (
+//     <ThemeProvider theme={theme}>
+//       <Routes>
+//         <Route path="/" element={<Animation />} />
+//         <Route path="*" element={<MainLayoutRoutes />} />
+//       </Routes>
+//     </ThemeProvider>
+//   );
+// }
 
-const PortfolioRoutes = () => (
-  <div>
-    <Routes>
-      <Route path="btb" element={<BrickToByte/>} />
-    </Routes>
-  </div>
-)
+// const MainLayoutRoutes = () => (
+//   <div>
+//     {/* <ButtonAppBar /> */}
+//     <Routes>
+//       <Route path="/home" element={<Home />} >
+//         <Route path="*" element={<PortfolioRoutes />} />
+//       </Route>
+//     </Routes>
+//   </div>
+// )
+
+// const PortfolioRoutes = () => (
+//   <div>
+//     <Routes>
+//       <Route path="btb" element={<BrickToByte/>} />
+//     </Routes>
+//   </div>
+// )
