@@ -25,14 +25,7 @@ const theme = createTheme({
 
 export default function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <ButtonAppBar/>
-      <Routes>
-        <Route path="/" element={<Animation />} />
-        <Route path="home" element={<Home />} />
-        <Route path="btb" element={<BrickToByte />} />
-      </Routes>
-    </ThemeProvider>
+    <Animation />
   );
 }
 

@@ -30,7 +30,7 @@ let y = 0;
 
 
 const DeathStar = () => {
-    const fbx = useLoader(FBXLoader, "./Death Star/Death Star.FBX");
+    const fbx = useLoader(FBXLoader, require("../Death Star/Death Star.FBX"));
 
     const ref = useRef();
     useFrame(() => (ref.current.rotation.y += 0.005));
@@ -107,26 +107,26 @@ function Stars(props) {
     )
 }
 
-const StarDestroyer = () => {
-    const gltf = useLoader(GLTFLoader, "./star_destroyer/scene.gltf");
+// const StarDestroyer = () => {
+//     const gltf = useLoader(GLTFLoader, require("../star_destroyer/scene.gltf"));
 
-    const ref = useRef();
-    useFrame(() => (ref.current.rotation.y += 0.005));
+//     const ref = useRef();
+//     useFrame(() => (ref.current.rotation.y += 0.005));
 
-    const planetMesh = <mesh
-        ref={ref}
-        position={[26, -3, 15]}
-    >
-        // Position around which the station rotates
-        <primitive object={gltf.scene} position={[-10, 0, 20]} rotation={[0,-Math.PI/1.8,0]} scale={0.3} />
-    </mesh>;
+//     const planetMesh = <mesh
+//         ref={ref}
+//         position={[26, -3, 15]}
+//     >
+//         // Position around which the station rotates
+//         <primitive object={gltf.scene} position={[-10, 0, 20]} rotation={[0,-Math.PI/1.8,0]} scale={0.3} />
+//     </mesh>;
 
-    return planetMesh;
-};
+//     return planetMesh;
+// };
 
 
 const Ship = () => {
-    const fbx = useLoader(FBXLoader, "./X-Wing.fbx");
+    const fbx = useLoader(FBXLoader, require("../X-Wing.fbx"));
     
     return (
         <mesh
@@ -187,7 +187,7 @@ const Composition = () => {
                 <Stars/>
                 <DeathStar />
                 <MouseTrackingShip/>
-                <StarDestroyer/>
+                {/* <StarDestroyer/> */}
             </Suspense>
         </>
     )
