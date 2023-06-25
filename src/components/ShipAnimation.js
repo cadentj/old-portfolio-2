@@ -1,19 +1,16 @@
-import { Box, Typography } from '@mui/material';
-import React, { useRef, Suspense, useState, useEffect } from 'react';
-import { Canvas, useThree, useLoader, useFrame } from "@react-three/fiber";
+import { Box } from '@mui/material';
+import React, { useRef, Suspense, useState } from 'react';
+import { Canvas, useLoader, useFrame } from "@react-three/fiber";
 import { FBXLoader } from "three/examples/jsm/loaders/FBXLoader";
-import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader';
-import { Camera, Vector3 } from "three";
-import { Html, OrbitControls, Loader, Text } from '@react-three/drei';
+import {  Vector3 } from "three";
+import {Loader, Text } from '@react-three/drei';
 import { useNavigate } from 'react-router-dom';
 
 import Montserrat from "../fonts/Montserrat/static/Montserrat-Bold.ttf"
-import Montserrat_Light from "../fonts/Montserrat/static/Montserrat-Light.ttf"
 import Courier_Prime from "../fonts/Courier_Prime/CourierPrime-Regular.ttf"
 
-import { ScrollControls, useScroll} from '@react-three/drei';
+import { ScrollControls, useScroll, Points, PointMaterial } from '@react-three/drei';
 
-import { Points, PointMaterial } from '@react-three/drei'
 import * as random from '@react-three/drei/node_modules/maath/random/dist/maath-random.esm'
 
 
@@ -107,23 +104,6 @@ function Stars(props) {
     )
 }
 
-// const StarDestroyer = () => {
-//     const gltf = useLoader(GLTFLoader, require("../star_destroyer/scene.gltf"));
-
-//     const ref = useRef();
-//     useFrame(() => (ref.current.rotation.y += 0.005));
-
-//     const planetMesh = <mesh
-//         ref={ref}
-//         position={[26, -3, 15]}
-//     >
-//         // Position around which the station rotates
-//         <primitive object={gltf.scene} position={[-10, 0, 20]} rotation={[0,-Math.PI/1.8,0]} scale={0.3} />
-//     </mesh>;
-
-//     return planetMesh;
-// };
-
 
 const Ship = () => {
     const fbx = useLoader(FBXLoader, require("../X-Wing.fbx"));
@@ -187,7 +167,6 @@ const Composition = () => {
                 <Stars/>
                 <DeathStar />
                 <MouseTrackingShip/>
-                {/* <StarDestroyer/> */}
             </Suspense>
         </>
     )
